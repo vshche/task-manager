@@ -41,7 +41,7 @@ services:
     networks:
       default:
         aliases:
-          - test-project.loc
+          - task-manager.loc
 
 volumes:
   db: ~
