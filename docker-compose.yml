@@ -1,0 +1,52 @@
+version: "3"
+services:
+
+  phpfpm:
+    build:
+      context: ./docker/phpfpm
+    environment:
+      - XDEBUG_CONFIG=remote_enable=on remote_connect_back=on remote_port=9013 remote_autostart=on
+    volumes:
+      - "./app:/var/www/project"
+    depends_on:
+      - db
+    networks:
+      - default
+
+  db:
+    image: mysql:latest
+    entrypoint: ['/entrypoint.sh', '--default-authentication-plugin=mysql_native_password']
+    ports:
+      - "${DB_PORT:-5306}:3306"
+    volumes:
+      - 'db:/var/lib/mysql'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    networks:
+      - default
+
+  nginx:
+    image: nginx
+    ports:
+      - "${NGINX_HTTP_PORT:-90}:80"
+    volumes:
+      - "./app:/var/www/project"
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/nginx/logs:/var/log/nginx
+    depends_on:
+      - phpfpm
+    networks:
+      default:
+        aliases:
+          - test-project.loc
+
+volumes:
+  db: ~
+
+networks:
+  default:
+    driver: bridge
+

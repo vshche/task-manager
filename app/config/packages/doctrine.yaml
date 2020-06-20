@@ -1,0 +1,18 @@
+doctrine:
+    dbal:
+        url: '%env(resolve:DATABASE_URL)%'
+
+        types:
+            task_id: 'TaskManager\Infrastructure\Persistence\Doctrine\DBAL\Type\TaskIdType'
+            task_status: 'TaskManager\Infrastructure\Persistence\Doctrine\DBAL\Type\TaskStatusType'
+            date_time: 'TaskManager\Infrastructure\Persistence\Doctrine\DBAL\Type\DateTimeType'
+    orm:
+        auto_generate_proxy_classes: true
+        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+        auto_mapping: true
+        mappings:
+            TaskManager:
+                is_bundle: false
+                type: yml
+                dir: '%kernel.project_dir%/config/packages/doctrine'
+                prefix: 'TaskManager\Domain\Entity'

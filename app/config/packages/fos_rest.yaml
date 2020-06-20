@@ -1,0 +1,23 @@
+fos_rest:
+    serializer:
+        serialize_null: true
+    param_fetcher_listener:  force
+    allowed_methods_listener:  true
+    body_converter:
+        enabled: true
+        validate: true
+    view:
+        view_response_listener:  force
+    exception:
+        enabled: true
+        map_exception_codes: true
+        messages:
+            Symfony\Component\HttpKernel\Exception\HttpException: true
+            Symfony\Component\Messenger\Exception\ValidationFailedException: true
+        codes:
+            UnexpectedValueException: HTTP_BAD_REQUEST
+            Symfony\Component\Messenger\Exception\ValidationFailedException: HTTP_UNPROCESSABLE_ENTITY
+            TaskManager\Domain\Exception\TaskNotFoundException: HTTP_NOT_FOUND
+    format_listener:
+        rules:
+            - { path: '^/', fallback_format: json }

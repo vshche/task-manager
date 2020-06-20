@@ -1,0 +1,13 @@
+framework:
+    messenger:
+        default_bus: messenger.bus.commands
+        buses:
+            messenger.bus.commands:
+                middleware:
+                    - validation
+                    - Symfony\Bridge\Doctrine\Messenger\DoctrineTransactionMiddleware
+                    - TaskManager\Infrastructure\Bus\Middleware\UnwrapNestedExceptionMiddleware
+            messenger.bus.queries:
+                middleware:
+                    - validation
+                    - TaskManager\Infrastructure\Bus\Middleware\UnwrapNestedExceptionMiddleware

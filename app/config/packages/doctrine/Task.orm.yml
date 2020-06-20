@@ -1,0 +1,23 @@
+TaskManager\Domain\Entity\Task:
+    type: entity
+    table: task
+
+    id:
+        id:
+            type: task_id
+
+    fields:
+        title:
+            type: string
+            nullable: false
+            length: 64
+        dueDate:
+            type: date_time
+            nullable: false
+        description:
+            type: string
+            nullable: true
+        status:
+            type: task_status
+            nullable: false
+            length: 16
