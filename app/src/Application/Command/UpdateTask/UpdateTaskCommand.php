@@ -6,6 +6,7 @@ namespace TaskManager\Application\Command\UpdateTask;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use TaskManager\Domain\ValueObject\TaskId;
+use TaskManager\Domain\ValueObject\DateTime;
 
 /**
  * @see UpdateTaskCommandHandler
@@ -23,11 +24,14 @@ final class UpdateTaskCommand
      * @var string|null
      *
      * @Assert\NotBlank()
+     * @Assert\Length(min=1, max=64)
      */
     private ?string $title;
 
     /**
      * @var string|null
+     *
+     * @Assert\Length(max=1000)
      */
     private ?string $description;
 
@@ -35,7 +39,7 @@ final class UpdateTaskCommand
      * @var string|null
      *
      * @Assert\NotBlank()
-     * @Assert\DateTime()
+     * @Assert\DateTime(format=DateTime::FORMAT)
      */
     private ?string $dueDate;
 

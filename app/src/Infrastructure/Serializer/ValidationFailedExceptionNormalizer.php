@@ -44,7 +44,7 @@ class ValidationFailedExceptionNormalizer implements NormalizerInterface, Normal
         $data = $this->fosRestExceptionNormalizer->normalize($object, $format, $context);
 
         if (isset($context['exception']) && $context['exception'] instanceof ValidationFailedException) {
-            $data['violations'] = $this->normalizer->normalize($context['exception']->getViolations());
+            $data = $this->normalizer->normalize($context['exception']->getViolations());
         }
 
         return $data;

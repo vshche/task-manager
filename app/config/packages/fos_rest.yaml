@@ -15,7 +15,7 @@ fos_rest:
             Symfony\Component\HttpKernel\Exception\HttpException: true
             Symfony\Component\Messenger\Exception\ValidationFailedException: true
         codes:
-            UnexpectedValueException: HTTP_BAD_REQUEST
+            DomainException: HTTP_BAD_REQUEST
             Symfony\Component\Messenger\Exception\ValidationFailedException: HTTP_UNPROCESSABLE_ENTITY
             TaskManager\Domain\Exception\TaskNotFoundException: HTTP_NOT_FOUND
     format_listener:

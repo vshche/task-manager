@@ -1,0 +1,233 @@
+swagger: "2.0"
+info:
+  description: "Task Manager app."
+  version: "1.0.0"
+  title: "Task Manager"
+basePath: "/"
+tags:
+- name: "task"
+schemes:
+- "https"
+paths:
+  /tasks:
+    post:
+      tags:
+      - "task"
+      summary: "Create new task"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/CreateTaskRequest"
+      responses:
+        "201":
+          description: "Task was created successfully"
+          schema:
+            $ref: "#/definitions/Task"
+        "422":
+          description: "Validation failed"
+          schema:
+            $ref: "#/definitions/ValidationFailedResponse"
+            
+    get:
+      tags:
+      - "task"
+      summary: "Get list of tasks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "query"
+        name: "status"
+        type: "string"
+        enum:
+        - "todo"
+        - "in_progress"
+        - "done"
+        required: false
+      responses:
+        "200":
+          description: "List of tasks"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Task"
+      
+  /tasks/{id}:
+    put:
+      tags:
+      - "task"
+      summary: "Update task"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateTaskRequest"
+      - in: "path"
+        name: "id"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        "200":
+          description: "Task was successfully updated"
+          schema:
+            $ref: "#/definitions/Task"
+        "422":
+          description: "Validation failed"
+          schema:
+            $ref: "#/definitions/ValidationFailedResponse"
+    get:
+      tags:
+      - "task"
+      summary: "Get task"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "id"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        "200":
+          description: "Task"
+          schema:
+            $ref: "#/definitions/Task"
+        "404":
+          description: "Task was not found"
+          
+  /tasks/{id}/start:
+    post:
+      tags:
+      - "task"
+      summary: "Start task"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "id"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        "200":
+          description: "Task"
+          schema:
+            $ref: "#/definitions/Task"
+        "400":
+          description: "Current task status is invalid"
+        "404":
+          description: "Task was not found"
+          
+  /tasks/{id}/finish:
+    post:
+      tags:
+      - "task"
+      summary: "Complete task"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "path"
+        name: "id"
+        required: true
+        type: "string"
+        format: "uuid"
+      responses:
+        "200":
+          description: "Task"
+          schema:
+            $ref: "#/definitions/Task"
+        "400":
+          description: "Current task status is invalid"
+        "404":
+          description: "Task was not found"        
+      
+definitions:
+  Task:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        format: "uuid"
+      title:
+        type: "string"
+        minLength: 1
+        maxLength: 64
+      description:
+        type: "string"
+        maxLength: 1000
+      due_date:
+        type: "string"
+        format: "date-time"
+      status:
+        type: "string"
+        description: "Task status"
+        enum:
+        - "todo"
+        - "in_progress"
+        - "done"
+        
+  CreateTaskRequest:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+        minLength: 1
+        maxLength: 64
+      description:
+        type: "string"
+        maxLength: 1000
+      due_date:
+        type: "string"
+        format: "date-time"
+    required: ["title", "due_date"]
+        
+  UpdateTaskRequest:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+        minLength: 1
+        maxLength: 64
+      description:
+        type: "string"
+        maxLength: 1000
+      due_date:
+        type: "string"
+        format: "date-time"
+    required: ["title", "due_date"]
+
+  ValidationFailedResponse:
+    type: "object"
+    properties:
+      title:
+        type: "string"
+      detail: 
+        type: "string"
+      violations:
+        type: "array"
+        items: 
+          type: object
+          properties:
+            propertyPath:
+              type: string
+            title: 
+              type: string

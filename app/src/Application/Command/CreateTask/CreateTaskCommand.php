@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TaskManager\Application\Command\CreateTask;
 
 use Symfony\Component\Validator\Constraints as Assert;
-use TaskManager\Application\Command\CreateTask\CreateTaskCommandHandler;
+use TaskManager\Domain\ValueObject\DateTime;
 
 /**
  * @see CreateTaskCommandHandler
@@ -31,7 +31,7 @@ final class CreateTaskCommand
      * @var string|null
      *
      * @Assert\NotBlank()
-     * @Assert\DateTime()
+     * @Assert\DateTime(format=DateTime::FORMAT)
      */
     private ?string $dueDate;
 

@@ -10,7 +10,7 @@ use TaskManager\Domain\Exception\DateTimeException;
 
 final class DateTime
 {
-    private const FORMAT = 'Y-m-d H:i:s';
+    public const FORMAT = 'Y-m-d\\TH:i:s';
 
     private DateTimeImmutable $dateTime;
 

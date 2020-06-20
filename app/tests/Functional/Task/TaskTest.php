@@ -7,6 +7,7 @@ namespace TaskManager\Tests\Functional\Task;
 use Faker\Factory;
 use Symfony\Component\HttpFoundation\Response;
 use TaskManager\Domain\Entity\Task;
+use TaskManager\Domain\ValueObject\DateTime;
 use TaskManager\Infrastructure\Persistence\Doctrine\Fixture\TaskFixture;
 use TaskManager\Tests\Functional\AbstractTestCase;
 
@@ -104,7 +105,7 @@ class TaskTest extends AbstractTestCase
             [
                 'title' => $faker->word,
                 'description' => $faker->sentence,
-                'due_date' => $faker->dateTime->format('Y-m-d H:i:s')
+                'due_date' => $faker->dateTime->format(DateTime::FORMAT)
             ],
             Response::HTTP_CREATED
         ];
@@ -128,7 +129,7 @@ class TaskTest extends AbstractTestCase
             $y1 = [
                 'title' => $faker->word,
                 'description' => $faker->sentence,
-                'due_date' => $faker->dateTime->format('Y-m-d H:i:s')
+                'due_date' => $faker->dateTime->format(DateTime::FORMAT)
             ],
             Response::HTTP_OK,
             static function (array $response) use ($y1) {
