@@ -9,7 +9,6 @@ use TaskManager\Application\CommandHandlerInterface;
 use TaskManager\Application\Dto\TaskDto;
 use TaskManager\Domain\Entity\Task;
 use TaskManager\Domain\Repository\TaskRepositoryInterface;
-use TaskManager\Domain\ValueObject\DateTime;
 use TaskManager\Domain\ValueObject\TaskId;
 
 class CreateTaskCommandHandler implements CommandHandlerInterface
@@ -38,7 +37,7 @@ class CreateTaskCommandHandler implements CommandHandlerInterface
         $task = new Task(
             $taskId,
             $command->getTitle(),
-            DateTime::fromString($command->getDueDate()),
+            $command->getDueDate(),
             $command->getDescription()
         );
 

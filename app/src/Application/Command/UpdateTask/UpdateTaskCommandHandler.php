@@ -7,7 +7,6 @@ namespace TaskManager\Application\Command\UpdateTask;
 use TaskManager\Application\CommandHandlerInterface;
 use TaskManager\Application\Dto\TaskDto;
 use TaskManager\Domain\Repository\TaskRepositoryInterface;
-use TaskManager\Domain\ValueObject\DateTime;
 
 class UpdateTaskCommandHandler implements CommandHandlerInterface
 {
@@ -32,7 +31,7 @@ class UpdateTaskCommandHandler implements CommandHandlerInterface
     {
         $task = $this->taskRepository->getById($command->getId());
 
-        $task->update($command->getTitle(), DateTime::fromString($command->getDueDate()), $command->getDescription());
+        $task->update($command->getTitle(), $command->getDueDate(), $command->getDescription());
 
         $this->taskRepository->save($task);
 

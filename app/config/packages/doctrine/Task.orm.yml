@@ -12,7 +12,7 @@ TaskManager\Domain\Entity\Task:
             nullable: false
             length: 64
         dueDate:
-            type: date_time
+            type: datetime_immutable
             nullable: false
         description:
             type: string

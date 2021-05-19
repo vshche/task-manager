@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TaskManager\Application\Dto;
 
+use DateTimeInterface;
 use TaskManager\Domain\Entity\Task;
 
 final class TaskDto
@@ -12,7 +13,7 @@ final class TaskDto
 
     private string $title;
 
-    private string $dueDate;
+    private DateTimeInterface $dueDate;
 
     private string $status;
 
@@ -25,23 +26,28 @@ final class TaskDto
     public static function fromTask(Task $task): self
     {
         return new self(
-            (string) $task->getId(),
+            (string)$task->getId(),
             $task->getTitle(),
-            (string) $task->getDueDate(),
-            (string) $task->getStatus(),
+            $task->getDueDate(),
+            (string)$task->getStatus(),
             $task->getDescription()
         );
     }
 
     /**
-     * @param string      $id
-     * @param string      $title
-     * @param string      $dueDate
-     * @param string      $status
-     * @param string|null $description
+     * @param string            $id
+     * @param string            $title
+     * @param DateTimeInterface $dueDate
+     * @param string            $status
+     * @param string|null       $description
      */
-    public function __construct(string $id, string $title, string $dueDate, string $status, ?string $description)
-    {
+    public function __construct(
+        string $id,
+        string $title,
+        DateTimeInterface $dueDate,
+        string $status,
+        ?string $description
+    ) {
         $this->id          = $id;
         $this->title       = $title;
         $this->dueDate     = $dueDate;
@@ -66,9 +72,9 @@ final class TaskDto
     }
 
     /**
-     * @return string
+     * @return DateTimeInterface
      */
-    public function getDueDate(): string
+    public function getDueDate(): DateTimeInterface
     {
         return $this->dueDate;
     }

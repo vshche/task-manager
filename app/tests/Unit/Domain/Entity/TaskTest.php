@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace TaskManager\Tests\Unit\Domain\Entity;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use TaskManager\Domain\Entity\Task;
 use TaskManager\Domain\Event\Task\TaskCreatedEvent;
 use TaskManager\Domain\Event\Task\TaskFinishedEvent;
 use TaskManager\Domain\Event\Task\TaskStartedEvent;
 use TaskManager\Domain\Event\Task\TaskUpdatedEvent;
-use TaskManager\Domain\ValueObject\DateTime;
 use TaskManager\Domain\ValueObject\TaskId;
 
 class TaskTest extends TestCase
@@ -20,7 +20,7 @@ class TaskTest extends TestCase
         $entity = new Task(
             TaskId::fromString('task-id'),
             'title',
-            DateTime::now(),
+            new DateTimeImmutable(),
             'description'
         );
 
@@ -37,7 +37,7 @@ class TaskTest extends TestCase
      */
     public function testUpdate(Task $entity): Task
     {
-        $entity->update('new-title', DateTime::fromString('+1 minute'), null);
+        $entity->update('new-title', new DateTimeImmutable('+1 minute'), null);
 
         self::assertCount(1, $events = $entity->popEvents());
         self::assertInstanceOf(TaskUpdatedEvent::class, $events[0]);

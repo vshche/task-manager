@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TaskManager\Infrastructure\Serializer;
 
-use Exception;
 use FOS\RestBundle\Serializer\Normalizer\FlattenExceptionNormalizer;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\Messenger\Exception\ValidationFailedException;
@@ -17,9 +16,6 @@ class ValidationFailedExceptionNormalizer implements NormalizerInterface, Normal
 {
     use NormalizerAwareTrait;
 
-    /**
-     * @var FlattenExceptionNormalizer
-     */
     private FlattenExceptionNormalizer $fosRestExceptionNormalizer;
 
     /**

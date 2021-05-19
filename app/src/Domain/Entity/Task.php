@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TaskManager\Domain\Entity;
 
+use DateTimeInterface;
 use DomainException;
 use TaskManager\Domain\Event\Task\TaskCreatedEvent;
 use TaskManager\Domain\Event\Task\TaskFinishedEvent;
@@ -11,7 +12,6 @@ use TaskManager\Domain\Event\Task\TaskStartedEvent;
 use TaskManager\Domain\Event\Task\TaskUpdatedEvent;
 use TaskManager\Domain\General\RaiseEventsInterface;
 use TaskManager\Domain\General\RaiseEventsTrait;
-use TaskManager\Domain\ValueObject\DateTime;
 use TaskManager\Domain\ValueObject\TaskId;
 use TaskManager\Domain\ValueObject\TaskStatus;
 
@@ -23,22 +23,22 @@ class Task implements RaiseEventsInterface
 
     private string $title;
 
-    private DateTime $dueDate;
+    private DateTimeInterface $dueDate;
 
     private TaskStatus $status;
 
     private ?string $description;
 
     /**
-     * @param TaskId          $id
-     * @param string          $title
-     * @param DateTime        $dueDate
-     * @param string|null     $description
+     * @param TaskId            $id
+     * @param string            $title
+     * @param DateTimeInterface $dueDate
+     * @param string|null       $description
      */
     public function __construct(
         TaskId $id,
         string $title,
-        DateTime $dueDate,
+        DateTimeInterface $dueDate,
         string $description = null
     ) {
         $this->id      = $id;
@@ -54,10 +54,10 @@ class Task implements RaiseEventsInterface
      * Change task
      *
      * @param string      $title
-     * @param DateTime    $dueDate
+     * @param DateTimeInterface    $dueDate
      * @param string|null $description
      */
-    public function update(string $title, DateTime $dueDate, ?string $description): void
+    public function update(string $title, DateTimeInterface $dueDate, ?string $description): void
     {
         $original = clone $this;
 
@@ -117,9 +117,9 @@ class Task implements RaiseEventsInterface
     }
 
     /**
-     * @return DateTime
+     * @return DateTimeInterface
      */
-    public function getDueDate(): DateTime
+    public function getDueDate(): DateTimeInterface
     {
         return $this->dueDate;
     }

@@ -14,9 +14,6 @@ use TaskManager\Domain\ValueObject\TaskStatus;
 
 class TaskRepository implements TaskRepositoryInterface
 {
-    /**
-     * @var EntityManagerInterface
-     */
     private EntityManagerInterface $em;
 
     private ObjectRepository $repository;

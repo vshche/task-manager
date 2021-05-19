@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace TaskManager\Tests\Functional\Task;
 
+use DateTimeInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
 use Symfony\Component\HttpFoundation\Response;
 use TaskManager\Domain\Entity\Task;
-use TaskManager\Domain\ValueObject\DateTime;
 use TaskManager\Infrastructure\Persistence\Doctrine\Fixture\TaskFixture;
 use TaskManager\Tests\Functional\AbstractTestCase;
 
@@ -21,7 +22,11 @@ class TaskTest extends AbstractTestCase
     public function testCreate(array $requestBody, int $expectedResponseCode): void
     {
         $response = $this->postRequest('/tasks', $requestBody);
-        $this->assertEquals($expectedResponseCode, $response->getStatusCode(), $response->getContent());
+        self::assertEquals($expectedResponseCode, $response->getStatusCode(), $response->getContent());
+
+        if ($expectedResponseCode === Response::HTTP_CREATED) {
+            self::assertCount(1, $this->em->getRepository(Task::class)->findAll());
+        }
     }
 
     /**
@@ -37,9 +42,9 @@ class TaskTest extends AbstractTestCase
         $task = $this->getFixtureReference('task_todo');
 
         $response = $this->putRequest('/tasks/' . $task->getId(), $requestBody);
-        $this->assertEquals($expectedResponseCode, $response->getStatusCode(), $response->getContent());
+        self::assertEquals($expectedResponseCode, $response->getStatusCode(), $response->getContent());
 
-        $assertions(json_decode($response->getContent(), true));
+        $assertions(json_decode($response->getContent(), true), $task);
     }
 
     public function testTransition(): void
@@ -105,7 +110,7 @@ class TaskTest extends AbstractTestCase
             [
                 'title' => $faker->word,
                 'description' => $faker->sentence,
-                'due_date' => $faker->dateTime->format(DateTime::FORMAT)
+                'due_date' => $faker->dateTime->format(DateTimeInterface::ATOM)
             ],
             Response::HTTP_CREATED
         ];
@@ -129,13 +134,19 @@ class TaskTest extends AbstractTestCase
             $y1 = [
                 'title' => $faker->word,
                 'description' => $faker->sentence,
-                'due_date' => $faker->dateTime->format(DateTime::FORMAT)
+                'due_date' => $faker->dateTime->format(DateTimeInterface::ATOM)
             ],
             Response::HTTP_OK,
-            static function (array $response) use ($y1) {
+            static function (array $response, Task $task) use ($y1) {
                 self::assertEquals($y1['title'], $response['title']);
                 self::assertEquals($y1['description'], $response['description']);
                 self::assertEquals($y1['due_date'], $response['due_date']);
+
+                $em = self::$kernel->getContainer()->get('test.service_container')->get(EntityManagerInterface::class);
+
+                $dbTask = $em->find(Task::class, $task->getId());
+                self::assertNotNull($dbTask);
+                self::assertEquals($y1['title'], $dbTask->getTitle());
             }
         ];
     }

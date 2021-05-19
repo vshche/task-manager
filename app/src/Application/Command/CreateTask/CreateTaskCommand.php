@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace TaskManager\Application\Command\CreateTask;
 
+use DateTimeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use TaskManager\Domain\ValueObject\DateTime;
 
 /**
  * @see CreateTaskCommandHandler
@@ -28,19 +28,18 @@ final class CreateTaskCommand
     private ?string $description;
 
     /**
-     * @var string|null
+     * @var DateTimeInterface|null
      *
      * @Assert\NotBlank()
-     * @Assert\DateTime(format=DateTime::FORMAT)
      */
-    private ?string $dueDate;
+    private ?DateTimeInterface $dueDate;
 
     /**
-     * @param string|null   $title
-     * @param string|null   $description
-     * @param string|null $dueDate
+     * @param string|null            $title
+     * @param string|null            $description
+     * @param DateTimeInterface|null $dueDate
      */
-    public function __construct(string $title = null, string $description = null, string $dueDate = null)
+    public function __construct(string $title = null, string $description = null, DateTimeInterface $dueDate = null)
     {
         $this->title = $title;
         $this->description = $description;
@@ -84,18 +83,18 @@ final class CreateTaskCommand
     }
 
     /**
-     * @return string|null
+     * @return DateTimeInterface|null
      */
-    public function getDueDate(): ?string
+    public function getDueDate(): ?DateTimeInterface
     {
         return $this->dueDate;
     }
 
     /**
-     * @param string|null $dueDate
+     * @param DateTimeInterface|null $dueDate
      * @return CreateTaskCommand
      */
-    public function setDueDate(?string $dueDate): self
+    public function setDueDate(?DateTimeInterface $dueDate): self
     {
         $this->dueDate = $dueDate;
         return $this;

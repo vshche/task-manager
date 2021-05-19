@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace TaskManager\Application\Command\UpdateTask;
 
+use DateTimeInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use TaskManager\Domain\ValueObject\TaskId;
-use TaskManager\Domain\ValueObject\DateTime;
 
 /**
  * @see UpdateTaskCommandHandler
@@ -36,25 +36,28 @@ final class UpdateTaskCommand
     private ?string $description;
 
     /**
-     * @var string|null
+     * @var DateTimeInterface|null
      *
      * @Assert\NotBlank()
-     * @Assert\DateTime(format=DateTime::FORMAT)
      */
-    private ?string $dueDate;
+    private ?DateTimeInterface $dueDate;
 
     /**
      * @param TaskId|null $id
      * @param string|null $title
      * @param string|null $description
-     * @param string|null $dueDate
+     * @param DateTimeInterface|null $dueDate
      */
-    public function __construct(TaskId $id = null, string $title = null, string $description = null, string $dueDate = null)
-    {
-        $this->id = $id;
-        $this->title = $title;
+    public function __construct(
+        TaskId $id = null,
+        string $title = null,
+        string $description = null,
+        DateTimeInterface $dueDate = null
+    ) {
+        $this->id          = $id;
+        $this->title       = $title;
         $this->description = $description;
-        $this->dueDate = $dueDate;
+        $this->dueDate     = $dueDate;
     }
 
     /**
@@ -112,18 +115,18 @@ final class UpdateTaskCommand
     }
 
     /**
-     * @return string|null
+     * @return DateTimeInterface|null
      */
-    public function getDueDate(): ?string
+    public function getDueDate(): ?DateTimeInterface
     {
         return $this->dueDate;
     }
 
     /**
-     * @param string|null $dueDate
+     * @param DateTimeInterface|null $dueDate
      * @return self
      */
-    public function setDueDate(?string $dueDate): self
+    public function setDueDate(?DateTimeInterface $dueDate): self
     {
         $this->dueDate = $dueDate;
         return $this;
